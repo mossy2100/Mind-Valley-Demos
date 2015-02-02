@@ -1,0 +1,122 @@
+<?php
+/**
+ * URL Shortener - main module file. All hooks go here.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function urlshort_menu() {
+  $items['shorten'] = array(
+    'title' => 'Shorten URL',
+    'description' => t("Go here to shorten a URL."),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('urlshort_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['shorten/ajax'] = array(
+    'page callback' => 'urlshort_ajax',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Main form for shortening URLs.
+ *
+ * @return array
+ */
+function urlshort_form() {
+  $form['long_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Long URL"),
+    '#description' => t("Paste your embarassingly long URL here and click Go."),
+  );
+  $form['go'] = array(
+    '#type' => 'button',
+    '#value' => t("Go"),
+  );
+  $form['short_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Short URL"),
+    '#description' => t("Copy your short and cute URL from here."),
+  );
+  $form['#attached']['js'][] = drupal_get_path('module', 'urlshort') . '/urlshort.js';
+  return $form;
+}
+
+/**
+ * AJAX callback for URL shortening.
+ */
+function urlshort_ajax() {
+  // Grab the URL from the query string.
+  // Won't sanitise here, to preserve the provided URL - Drupal's DB API will
+  // protect the database when we insert the URL later.
+  $url = !empty($_GET['url']) ? $_GET['url'] : FALSE;
+
+  // Check a URL was provided.
+  if (!$url) {
+    // Return JSON.
+    echo json_encode(array('error' => t("Missing URL")));
+    return;
+  }
+
+  // We will, however, check it's actually a URL.
+  $url_info = @parse_url($url);
+  if (!$url_info) {
+    // Return JSON.
+    echo json_encode(array('error' => t("Invalid URL")));
+    return;
+  }
+
+  // For now, we'll start with 5-char codes, which will give us support for
+  // shortening 16^5 = 1048576 possible URLs (i.e. over a million). Should be
+  // plenty considering the likely lifespan of this site!
+  $code_length = 5;
+
+  // Check if the database is full:
+  $max_num_urls = pow(16, 5);
+  $count = db_query('select count(*) from urlshort')->fetchField();
+
+  if ($count >= $max_num_urls) {
+    // Return JSON.
+    echo json_encode(array('error' => t("At capacity! Try bit.ly :)")));
+    return;
+  }
+
+  // Find a suitable alias.
+  $hash = sha1($url);
+
+  // SHA1 gives us 40 chars, so let's grab successive 5-char pieces looking for
+  // a free slot.
+  for ($i = 0; $i <= strlen($hash) - $code_length; $i++) {
+    $code = substr($hash, $i, $code_length);
+
+    // Available?
+    $rs = db_select('urlshort')
+      ->fields('urlshort', array('id'))
+      ->condition('code', $code)
+      ->execute();
+    if (!$rs->rowCount()) {
+      // Free slot - let's insert the record.
+      db_insert('urlshort')
+        ->fields(array(
+          'code' => $code,
+          'url' => $url,
+        ));
+      // Done:
+      echo json_encode(array('code' => $code));
+      return;
+    }
+  }
+
+  // Back up plan. Try a brute force approach. i.e. find first available code.
+  // Note, this won't work if codes are longer than 8 chars.
+  // Do this later.
+
+  // Return JSON.
+  echo '{"error": "Key not found."}';
+  return;
+}

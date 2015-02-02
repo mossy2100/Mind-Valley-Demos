@@ -1,0 +1,4 @@
+name = URL Shortener
+description = Shortens URLs, surprisingly.
+package = Mindvalley
+core = 7.x
