@@ -55,7 +55,7 @@ function urlshort_form() {
   $form['long_url'] = array(
     '#type' => 'textfield',
     '#title' => t("Long URL"),
-    '#description' => t("Paste your embarassingly long URL here and click Go."),
+    '#description' => t("Paste your embarrassingly long URL here and click Go."),
   );
   $form['go'] = array(
     '#type' => 'button',
@@ -146,8 +146,9 @@ function urlshort_ajax() {
   }
 
   // Get the latest code.
-  $last_code = db_query('select max(id), code from {urlshort} group by id')
+  $last_code = db_query('select code from urlshort order by id desc limit 1')
     ->fetchField();
+
   // Get the next code.
   if (!$last_code) {
     // First one! Should only happen once.

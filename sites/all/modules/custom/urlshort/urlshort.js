@@ -4,12 +4,14 @@
  */
 
 
-function($, window, Drupal) {
+(function ($) {
 
   /**
    * Add AJAX behaviours.
    */
-  function urlshortGoClick() {
+  function urlshortGoClick(e) {
+    // Prevent submission of the form.
+    e.preventDefault();
 
     // Grab the long URL.
     var url = $('#edit-long-url').val();
@@ -18,12 +20,11 @@ function($, window, Drupal) {
     }
     else {
       // Create AJAX request.
-      $.get("/shorten", {url: url}, function(textStatus, data) {
-        console.log(textStatus, data);
-
-
-
-      });
+      $.get("/shorten/ajax", {url: url}, function(data, textStatus) {
+        if (typeof data.code == 'string') {
+          $('#edit-short-url').val('http://mdv.al/' + data.code);
+        }
+      }, 'json');
     }
   }
 
@@ -31,10 +32,16 @@ function($, window, Drupal) {
    * Attach behaviours.
    */
   function urlshortInit() {
-    $('#go-button').click(urlshortGoClick);
+    // Clear the short URL field if they change the long URL.
+    $('#edit-long-url').keydown(function() {
+      $('#edit-short-url').val('');
+    })
+
+    // If the click Go, get the short URL.
+    $('#edit-go').click(urlshortGoClick);
   }
 
   // Run the init func on page ready.
   $(urlshortInit);
 
-}(jQuery, window, Drupal);
+})(jQuery);
