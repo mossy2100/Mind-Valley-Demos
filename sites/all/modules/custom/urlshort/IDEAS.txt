@@ -1,0 +1,2 @@
+1. Add some OOP e.g. the lookup functions, the base32 inc function.
+2. Add a hook_install() and .install file to create the urlshort table.
