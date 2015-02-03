@@ -7,3 +7,6 @@ sites/*/private
 
 # Ignore PhpStorm files
 .idea
+
+# Ignore Mac files
+.DS_Store
