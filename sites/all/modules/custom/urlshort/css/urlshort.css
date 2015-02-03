@@ -1,0 +1,84 @@
+/* line 4, ../scss/urlshort.scss */
+body {
+  background-color: #e7e7e7;
+  color: #000;
+}
+
+/* line 11, ../scss/urlshort.scss */
+#urlshort-form {
+  width: 512px;
+}
+/* line 15, ../scss/urlshort.scss */
+#urlshort-form input,
+#urlshort-form label {
+  font-size: 20px;
+  font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+}
+/* line 20, ../scss/urlshort.scss */
+#urlshort-form input {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  border: solid 1px #c0c0c0;
+}
+/* line 26, ../scss/urlshort.scss */
+#urlshort-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+/* line 31, ../scss/urlshort.scss */
+#urlshort-form #edit-long-url {
+  width: 500px;
+}
+/* line 35, ../scss/urlshort.scss */
+#urlshort-form #go-btn-wrapper {
+  height: 35px;
+}
+/* line 39, ../scss/urlshort.scss */
+#urlshort-form #button-label {
+  display: inline;
+  line-height: 35px;
+}
+/* line 44, ../scss/urlshort.scss */
+#urlshort-form #edit-go {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffa84c), color-stop(100%, #ff7b0d));
+  background-image: -webkit-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -o-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: linear-gradient(#ffa84c, #ff7b0d);
+  padding: 5px;
+  color: #fff;
+  font-weight: bold;
+  border-color: #f36e00;
+  float: right;
+  height: 35px;
+}
+/* line 53, ../scss/urlshort.scss */
+#urlshort-form #edit-go:hover {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
+  background-image: -webkit-linear-gradient(#7abcff, #4096ee);
+  background-image: -moz-linear-gradient(#7abcff, #4096ee);
+  background-image: -o-linear-gradient(#7abcff, #4096ee);
+  background-image: linear-gradient(#7abcff, #4096ee);
+  cursor: pointer;
+  border-color: #2989ec;
+}
+/* line 60, ../scss/urlshort.scss */
+#urlshort-form #edit-short-url {
+  width: 200px;
+  float: right;
+}
+/* line 65, ../scss/urlshort.scss */
+#urlshort-form .form-item-short-url {
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 71, ../scss/urlshort.scss */
+#urlshort-form .form-item-long-url,
+#urlshort-form #go-btn-wrapper,
+#urlshort-form .form-item-short-url {
+  margin-bottom: 30px;
+}

@@ -4,26 +4,46 @@
  */
 
 /**
+ * Constant to define valid characters (digits) in a shortened URL code.
+ * Use my triacontakaidecimal (base-32) number system (no TOIL).
+ * Like other URL-shortening services, a base-62 system could be used that would
+ * support all upper- and lower-case letters, but MySQL is case-insensitive out
+ * of the box, so this will do for now. At least with this system the digits are
+ * more likely to be transposed without errors if written.
+ *
+ * @var string
+ */
+define('URLSHORT_CHARS', '0123456789ABCDEFGHJKMNPQRSUVWXYZ');
+
+/**
  * Implements hook_init().
  */
 function urlshort_init() {
-  // Check if the request is for a URL expansion, or a page on the site, e.g.
-  // the main form, or a Drupal admin page.
+  // Check if the request is for a URL expansion or a page on the normal
+  // website (the main form, or a Drupal page).
+  // If normal website, we use the 'www' subdomain.
+  // If a URL expansion is wanted, use the host name without 'www'.
 
-  var_dump($_SERVER);
+  // Check if the requester is attempting a URL expansion.
+  // If so, the URL should not begin with 'www'.
+  $host = $_SERVER['HTTP_HOST'];
+  if (substr($host, 0, 4) != 'www.') {
 
+    // Check if the request looks like a code.
+    $request_uri = trim($_SERVER['REQUEST_URI'], '/');
+    if (preg_match('/^[' . URLSHORT_CHARS . ']+$/', $request_uri)) {
+      // Lookup the URL.
+      $url = urlshort_lookup_url($request_uri);
+      if ($url) {
+        // Boom - URL expanded.
+        drupal_goto($url);
+      }
+    }
 
-  // If the requested page contains a /, go straight to the Drupal domain.
-  if (strpos($_GET['q'], '/') !== FALSE) {
-
+    // Redirect to www.
+    $scheme = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+    drupal_goto("$scheme://www.$host/$request_uri");
   }
-
-  //Easiest way is to lookup the code
-  // and if there's no match, forward to the Drupal site.
-
-
-
-
 }
 
 /**
@@ -31,7 +51,6 @@ function urlshort_init() {
  */
 function urlshort_menu() {
   $items['shorten'] = array(
-    'title' => 'Shorten URL',
     'description' => t("Go here to shorten a URL."),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('urlshort_form'),
@@ -54,20 +73,60 @@ function urlshort_menu() {
 function urlshort_form() {
   $form['long_url'] = array(
     '#type' => 'textfield',
-    '#title' => t("Long URL"),
-    '#description' => t("Paste your embarrassingly long URL here and click Go."),
+    '#title' => t("1. Paste your embarrassingly long URL here &darr;"),
   );
   $form['go'] = array(
     '#type' => 'button',
-    '#value' => t("Go"),
+    '#value' => t("Squish"),
+    '#prefix' => "<div id='go-btn-wrapper'><label for='edit-go' id='button-label'>" . t("2. Click this sexy button &rarr;") . " </label>",
+    '#suffix' => "</div>",
   );
   $form['short_url'] = array(
     '#type' => 'textfield',
-    '#title' => t("Short URL"),
-    '#description' => t("Copy your short and cute URL from here."),
+    '#title' => t("3. Copy your super-cute short URL from here &darr;"),
   );
-  $form['#attached']['js'][] = drupal_get_path('module', 'urlshort') . '/urlshort.js';
+  $form['msg'] = array(
+    '#markup' => "<label>" . t("4. Have an awesome day :)") . "</label>",
+  );
+  $form['#attached']['js'][] = drupal_get_path('module', 'urlshort') . '/js/urlshort.js';
+  $form['#attached']['css'][] = drupal_get_path('module', 'urlshort') . '/css/urlshort.css';
   return $form;
+}
+
+/**
+ * Get the URL matching a short code.
+ *
+ * @param string $code
+ *   The code from the shortened URL.
+ *
+ * @return string
+ *   The URL or FALSE if not found.
+ */
+function urlshort_lookup_url($code) {
+  $url = db_select('urlshort', 'u')
+    ->fields('u', array('url'))
+    ->condition('code', $code)
+    ->execute()
+    ->fetchField();
+  return empty($url) ? FALSE : $url;
+}
+
+/**
+ * Get the code matching a URL.
+ *
+ * @param string $url
+ *   The original URL.
+ *
+ * @return string
+ *   The code or FALSE if not found.
+ */
+function urlshort_lookup_code($url) {
+  $code = db_select('urlshort', 'u')
+    ->fields('u', array('code'))
+    ->condition('url', $url)
+    ->execute()
+    ->fetchField();
+  return empty($code) ? FALSE : $code;
 }
 
 /**
@@ -77,9 +136,8 @@ function urlshort_form() {
  * @return string
  */
 function urlshort_inc_code($code) {
-  // Simple base-62 number system, typical for this use case.
-  $digits = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $last_digit = $digits[strlen($digits) - 1];
+  // Unfortunately can't use [] character indexing with constants.
+  $last_digit = substr(URLSHORT_CHARS, strlen(URLSHORT_CHARS) - 1);
   // Find digit to increment:
   $found = FALSE;
   $code_len = strlen($code);
@@ -95,9 +153,9 @@ function urlshort_inc_code($code) {
 
   if ($found) {
     // Get the integer equivalent of the current character at position $n.
-    $x = strpos($digits, $ch);
+    $x = strpos(URLSHORT_CHARS, $ch);
     // Next digit.
-    $new_digit = $digits[$x + 1];
+    $new_digit = substr(URLSHORT_CHARS, $x + 1, 1);
     // Assemble new code.
     $new_code = substr($code, 0, $n) . $new_digit . str_repeat('0', $code_len - $n - 1);
   }
@@ -134,18 +192,14 @@ function urlshort_ajax() {
   }
 
   // Did we already do this one?
-  $code = db_select('urlshort', 'u')
-    ->fields('u', array('code'))
-    ->condition('url', $url)
-    ->execute()
-    ->fetchField();
+  $code = urlshort_lookup_code($url);
   if ($code) {
     // Yes, we did.
     echo json_encode(array('code' => $code));
     return;
   }
 
-  // Get the latest code.
+  // Get the last code created.
   $last_code = db_query('select code from urlshort order by id desc limit 1')
     ->fetchField();
 

@@ -1,0 +1,74 @@
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+
+body {
+  background-color: #e7e7e7;
+  color: #000;
+}
+
+$btn-height: 35px;
+
+#urlshort-form {
+  width: 512px;
+
+  input,
+  label {
+    font-size: 20px;
+    font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+  }
+
+  input {
+    @include border-radius(5px);
+    padding: 5px;
+    border: solid 1px #c0c0c0;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  #edit-long-url {
+    width: 500px;
+  }
+
+  #go-btn-wrapper {
+    height: $btn-height;
+  }
+
+  #button-label {
+    display: inline;
+    line-height: $btn-height;
+  }
+
+  #edit-go {
+    @include background-image(linear-gradient(#ffa84c, #ff7b0d));
+    padding: 5px;
+    color: #fff;
+    font-weight: bold;
+    border-color: darken(#ff7b0d, 5%);
+    float: right;
+    height: $btn-height;
+
+    &:hover {
+      @include background-image(linear-gradient(#7abcff, #4096ee));
+      cursor: pointer;
+      border-color: darken(#4096ee, 5%);
+    }
+  }
+
+  #edit-short-url {
+    width: 200px;
+    float: right;
+  }
+
+  .form-item-short-url {
+    @include clearfix;
+  }
+
+  .form-item-long-url,
+  #go-btn-wrapper,
+  .form-item-short-url {
+    margin-bottom: 30px;
+  }
+}
