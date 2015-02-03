@@ -71,6 +71,9 @@ function urlshort_menu() {
  * @return array
  */
 function urlshort_form() {
+  $form['error_msg'] = array(
+    '#markup' => "<div id='error-msg'></div>",
+  );
   $form['long_url'] = array(
     '#type' => 'textfield',
     '#title' => t("1. Paste your embarrassingly long URL here &darr;"),
@@ -179,7 +182,7 @@ function urlshort_ajax() {
   // Check a URL was provided.
   if (!$url) {
     // Return JSON.
-    echo json_encode(array('error' => t("Missing URL")));
+    echo json_encode(array('error' => t("Please paste a valid URL in the long URL field.")));
     return;
   }
 
@@ -187,14 +190,14 @@ function urlshort_ajax() {
   $url_info = @parse_url($url);
   if (!$url_info) {
     // Return JSON.
-    echo json_encode(array('error' => t("Invalid URL")));
+    echo json_encode(array('error' => t("Please paste a valid URL in the long URL field.")));
     return;
   }
 
   // Did we already do this one?
   $code = urlshort_lookup_code($url);
   if ($code) {
-    // Yes, we did.
+    // Yes, we did. Return the existing code.
     echo json_encode(array('code' => $code));
     return;
   }
@@ -221,5 +224,6 @@ function urlshort_ajax() {
     ))
     ->execute();
 
+  // Send the code to the client.
   echo json_encode(array('code' => $code));
 }

@@ -13,10 +13,13 @@
     // Prevent submission of the form.
     e.preventDefault();
 
+    // Hide the error message if visible.
+    $('#error-msg').hide();
+
     // Grab the long URL.
     var url = $('#edit-long-url').val();
     if (!url) {
-      alert("Put something in the long URL field first, silly!");
+      $('#error-msg').text("Put something in the long URL field first, silly!").show();
     }
     else {
       // Create AJAX request.
@@ -27,6 +30,9 @@
           $('#edit-short-url')
             .val('http://' + window.nakedHost + '/' + data.code)
             .select();
+        }
+        else if (typeof data.error == 'string') {
+          $('#error-msg').text(data.error).show();
         }
       }, 'json');
     }
@@ -51,11 +57,15 @@
       .keydown(function() {
         // Clear the short URL field if they change the long URL.
         $('#edit-short-url').val('');
+        // Hide the error message if visible.
+        $('#error-msg').hide();
       })
       .focus(function() {
         // Clear the long URL if it regains focus, because it probably means
         // the user wants to shorten another URL.
         $(this).val('');
+        // Hide the error message if visible.
+        $('#error-msg').hide();
       });
 
     // If the click Go, shorten the URL.

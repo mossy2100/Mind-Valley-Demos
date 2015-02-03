@@ -12,7 +12,8 @@ $btn-height: 35px;
   width: 512px;
 
   input,
-  label {
+  label,
+  #error-msg {
     font-size: 20px;
     font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
   }
@@ -26,6 +27,14 @@ $btn-height: 35px;
   label {
     font-weight: bold;
     margin-bottom: 5px;
+  }
+
+  #error-msg {
+    display: none;
+    background-color: #fee;
+    border: solid 1px #f88;
+    @include border-radius(5px);
+    padding: 5px;
   }
 
   #edit-long-url {
