@@ -4,6 +4,29 @@
  */
 
 /**
+ * Implements hook_init().
+ */
+function urlshort_init() {
+  // Check if the request is for a URL expansion, or a page on the site, e.g.
+  // the main form, or a Drupal admin page.
+
+  var_dump($_SERVER);
+
+
+  // If the requested page contains a /, go straight to the Drupal domain.
+  if (strpos($_GET['q'], '/') !== FALSE) {
+
+  }
+
+  //Easiest way is to lookup the code
+  // and if there's no match, forward to the Drupal site.
+
+
+
+
+}
+
+/**
  * Implements hook_menu().
  */
 function urlshort_menu() {
@@ -48,6 +71,45 @@ function urlshort_form() {
 }
 
 /**
+ * Increments the provided code.
+ *
+ * @param string $code
+ * @return string
+ */
+function urlshort_inc_code($code) {
+  // Simple base-62 number system, typical for this use case.
+  $digits = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  $last_digit = $digits[strlen($digits) - 1];
+  // Find digit to increment:
+  $found = FALSE;
+  $code_len = strlen($code);
+  $n = $code_len - 1;
+  while ($n >= 0) {
+    $ch = $code[$n];
+    if ($ch != $last_digit) {
+      $found = TRUE;
+      break;
+    }
+    $n--;
+  }
+
+  if ($found) {
+    // Get the integer equivalent of the current character at position $n.
+    $x = strpos($digits, $ch);
+    // Next digit.
+    $new_digit = $digits[$x + 1];
+    // Assemble new code.
+    $new_code = substr($code, 0, $n) . $new_digit . str_repeat('0', $code_len - $n - 1);
+  }
+  else {
+    // Increase code length by 1.
+    $new_code = '1' . str_repeat('0', $code_len);
+  }
+
+  return $new_code;
+}
+
+/**
  * AJAX callback for URL shortening.
  */
 function urlshort_ajax() {
@@ -71,52 +133,38 @@ function urlshort_ajax() {
     return;
   }
 
-  // For now, we'll start with 5-char codes, which will give us support for
-  // shortening 16^5 = 1048576 possible URLs (i.e. over a million). Should be
-  // plenty considering the likely lifespan of this site!
-  $code_length = 5;
-
-  // Check if the database is full:
-  $max_num_urls = pow(16, 5);
-  $count = db_query('select count(*) from urlshort')->fetchField();
-
-  if ($count >= $max_num_urls) {
-    // Return JSON.
-    echo json_encode(array('error' => t("At capacity! Try bit.ly :)")));
+  // Did we already do this one?
+  $code = db_select('urlshort', 'u')
+    ->fields('u', array('code'))
+    ->condition('url', $url)
+    ->execute()
+    ->fetchField();
+  if ($code) {
+    // Yes, we did.
+    echo json_encode(array('code' => $code));
     return;
   }
 
-  // Find a suitable alias.
-  $hash = sha1($url);
-
-  // SHA1 gives us 40 chars, so let's grab successive 5-char pieces looking for
-  // a free slot.
-  for ($i = 0; $i <= strlen($hash) - $code_length; $i++) {
-    $code = substr($hash, $i, $code_length);
-
-    // Available?
-    $rs = db_select('urlshort')
-      ->fields('urlshort', array('id'))
-      ->condition('code', $code)
-      ->execute();
-    if (!$rs->rowCount()) {
-      // Free slot - let's insert the record.
-      db_insert('urlshort')
-        ->fields(array(
-          'code' => $code,
-          'url' => $url,
-        ));
-      // Done:
-      echo json_encode(array('code' => $code));
-      return;
-    }
+  // Get the latest code.
+  $last_code = db_query('select max(id), code from {urlshort} group by id')
+    ->fetchField();
+  // Get the next code.
+  if (!$last_code) {
+    // First one! Should only happen once.
+    $code = '1';
+  }
+  else {
+    // Add 1 to last code.
+    $code = urlshort_inc_code($last_code);
   }
 
-  // Back up plan. Try a brute force approach. i.e. find first available code.
-  // Note, this won't work if codes are longer than 8 chars.
-  // Do this later.
+  // Add it to the database.
+  db_insert('urlshort')
+    ->fields(array(
+      'code' => $code,
+      'url' => $url,
+    ))
+    ->execute();
 
-  // Return JSON.
-  echo '{"error": "Key not found."}';
-  return;
+  echo json_encode(array('code' => $code));
 }
