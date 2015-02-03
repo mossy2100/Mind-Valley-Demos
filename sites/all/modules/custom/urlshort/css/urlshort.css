@@ -49,26 +49,26 @@ body {
   background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
   background-image: -o-linear-gradient(#ffa84c, #ff7b0d);
   background-image: linear-gradient(#ffa84c, #ff7b0d);
-  padding: 5px;
-  color: #fff;
-  font-weight: bold;
   border-color: #f36e00;
+  color: #fff;
+  padding: 5px;
+  font-weight: bold;
   float: right;
   height: 35px;
 }
 /* line 53, ../scss/urlshort.scss */
 #urlshort-form #edit-go:hover {
+  cursor: pointer;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
   background-image: -webkit-linear-gradient(#7abcff, #4096ee);
   background-image: -moz-linear-gradient(#7abcff, #4096ee);
   background-image: -o-linear-gradient(#7abcff, #4096ee);
   background-image: linear-gradient(#7abcff, #4096ee);
-  cursor: pointer;
   border-color: #2989ec;
 }
 /* line 60, ../scss/urlshort.scss */
 #urlshort-form #edit-short-url {
-  width: 200px;
+  width: 250px;
   float: right;
 }
 /* line 65, ../scss/urlshort.scss */

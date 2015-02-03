@@ -7,7 +7,7 @@
  * Constant to define valid characters (digits) in a shortened URL code.
  * Use my triacontakaidecimal (base-32) number system (no TOIL).
  * Like other URL-shortening services, a base-62 system could be used that would
- * support all upper- and lower-case letters, but MySQL is case-insensitive out
+ * include all upper- and lower-case letters, but MySQL is case-insensitive out
  * of the box, so this will do for now. At least with this system the digits are
  * more likely to be transposed without errors if written.
  *

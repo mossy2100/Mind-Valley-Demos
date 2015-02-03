@@ -20,9 +20,13 @@
     }
     else {
       // Create AJAX request.
-      $.get("/shorten/ajax", {url: url}, function(data, textStatus) {
+      $.get("/shorten/ajax", {url: url}, function(data) {
         if (typeof data.code == 'string') {
-          $('#edit-short-url').val('http://' + window.nakedHost + '/' + data.code).select();
+          // Stick the shortened URL in the text field and automatically select
+          // it so the user can easily copy it.
+          $('#edit-short-url')
+            .val('http://' + window.nakedHost + '/' + data.code)
+            .select();
         }
       }, 'json');
     }
