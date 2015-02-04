@@ -10,3 +10,6 @@ sites/*/private
 
 # Ignore Mac files
 .DS_Store
+
+# sass-cache files
+.sass-cache

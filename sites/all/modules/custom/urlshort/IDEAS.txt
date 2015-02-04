@@ -1,2 +1,10 @@
+TODO
+1. Prepend http:// if not already there.
+
+
+IDEAS
 1. Add some OOP e.g. the lookup functions, the base32 inc function.
 2. Add a hook_install() and .install file to create the urlshort table.
+3. Theme the login form same as the URL form.
+4. Store the most recent code in a persistent variable, quicker to find.
+

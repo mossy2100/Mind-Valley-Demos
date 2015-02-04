@@ -1,0 +1,121 @@
+/* line 6, ../scss/gol.scss */
+body {
+  background-color: black;
+  margin: 10px;
+  overflow: hidden;
+}
+
+/* line 12, ../scss/gol.scss */
+#breadcrumb {
+  display: none;
+}
+
+/* line 16, ../scss/gol.scss */
+div.section {
+  margin: 0;
+}
+
+/* line 21, ../scss/gol.scss */
+#gol-options-form * {
+  font-size: 20px;
+  font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+}
+/* line 28, ../scss/gol.scss */
+#gol-options-form .form-item,
+#gol-options-form input,
+#gol-options-form label {
+  display: inline-block;
+}
+/* line 33, ../scss/gol.scss */
+#gol-options-form > div {
+  display: block;
+}
+/* line 38, ../scss/gol.scss */
+#gol-options-form input,
+#gol-options-form select {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  border: solid 1px #c0c0c0;
+  background-color: white;
+}
+/* line 45, ../scss/gol.scss */
+#gol-options-form .form-item {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #dedede));
+  background-image: -webkit-linear-gradient(#f7f7f7, #dedede);
+  background-image: -moz-linear-gradient(#f7f7f7, #dedede);
+  background-image: -o-linear-gradient(#f7f7f7, #dedede);
+  background-image: linear-gradient(#f7f7f7, #dedede);
+  border-color: #d1d1d1;
+  padding: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  height: 25px;
+  margin: 0;
+}
+/* line 55, ../scss/gol.scss */
+#gol-options-form .form-item * {
+  line-height: 25px;
+  padding: 0;
+  margin: 0;
+}
+/* line 63, ../scss/gol.scss */
+#gol-options-form .form-item,
+#gol-options-form input[type=button] {
+  margin: 0 10px 10px 0;
+}
+/* line 67, ../scss/gol.scss */
+#gol-options-form input[type=button] {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffa84c), color-stop(100%, #ff7b0d));
+  background-image: -webkit-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -o-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: linear-gradient(#ffa84c, #ff7b0d);
+  border-color: #f36e00;
+  color: #fff;
+  padding: 0 10px;
+  font-weight: bold;
+  height: 45px;
+}
+/* line 75, ../scss/gol.scss */
+#gol-options-form input[type=button]:hover {
+  cursor: pointer;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
+  background-image: -webkit-linear-gradient(#7abcff, #4096ee);
+  background-image: -moz-linear-gradient(#7abcff, #4096ee);
+  background-image: -o-linear-gradient(#7abcff, #4096ee);
+  background-image: linear-gradient(#7abcff, #4096ee);
+  border-color: #2989ec;
+}
+/* line 82, ../scss/gol.scss */
+#gol-options-form #gol-board {
+  display: block;
+}
+/* line 85, ../scss/gol.scss */
+#gol-options-form #gol-board table {
+  margin: 0;
+}
+/* line 89, ../scss/gol.scss */
+#gol-options-form #gol-board td {
+  border: solid 1px #777;
+  padding: 0;
+  font-size: 0;
+}
+/* line 94, ../scss/gol.scss */
+#gol-options-form #gol-board td:hover {
+  background-color: #8b0000;
+}
+/* line 99, ../scss/gol.scss */
+#gol-options-form #gol-board td.alive {
+  background-color: #fff;
+}
+/* line 102, ../scss/gol.scss */
+#gol-options-form #gol-board td.alive:hover {
+  background-color: #ffb6c1;
+}

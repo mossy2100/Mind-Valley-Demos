@@ -1,0 +1,73 @@
+<?php
+/**
+ * @file
+ * Game of Life main module file. All hooks go here.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function gol_menu() {
+  $items['game-of-life'] = array(
+    'description' => t("Conway's Game of Life."),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('gol_options_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * The single main form for selecting Game of Life options.
+ */
+function gol_options_form() {
+  // Options.
+  $sizes = range(5, 30);
+  $form['square_size'] = array(
+    '#title' => t("Square size"),
+    '#type' => 'select',
+    '#options' => array_combine($sizes, $sizes),
+    '#default_value' => 20,
+  );
+  $form['wrap'] = array(
+    '#title' => t("Wrap grid"),
+    '#type' => 'checkbox',
+    '#default_value' => FALSE,
+  );
+  $densities = range(0, 100, 5);
+  $percentages = array_map(function($d) {
+    return "$d%";
+  }, $densities);
+  $form['density'] = array(
+    '#title' => t("Density"),
+    '#type' => 'select',
+    '#options' => array_combine($densities, $percentages),
+    '#default_value' => 50,
+  );
+
+  // Buttons.
+  $form['initialise'] = array(
+    '#markup' => '<input type="button" id="btn-init" value="' . t('Initialise') . '">',
+  );
+  $form['clear'] = array(
+    '#markup' => '<input type="button" id="btn-clear" value="' . t('Clear') . '">',
+  );
+  $form['play'] = array(
+    '#markup' => '<input type="button" id="btn-play" value="' . t('Play') . '">',
+  );
+  $form['pause'] = array(
+    '#markup' => '<input type="button" id="btn-pause" value="' . t('Pause') . '">',
+  );
+
+  // The game board.
+  $form['board'] = array(
+    '#markup' => "<div id='gol-board'></div>",
+  );
+
+  // JS and CSS.
+  $form['#attached']['js'][] = drupal_get_path('module', 'gol') . '/js/gol.js';
+  $form['#attached']['css'][] = drupal_get_path('module', 'gol') . '/css/gol.css';
+
+  return $form;
+}
