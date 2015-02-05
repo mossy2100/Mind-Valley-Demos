@@ -209,10 +209,24 @@ function urlshort_ajax() {
   }
 
   // Get the last code created.
-  $last_code = variable_get('urlshort_last_code', '0');
+  $last_code = variable_get('urlshort_last_code', NULL);
 
-  // Add 1 to last code.
-  $next_code = urlshort_inc_code($last_code);
+  // If not found in the persistent variable, fall back to looking in the short
+  // URL table. Should only happen once.
+  if (!$last_code) {
+    $last_code = db_query('select code from urlshort order by id desc limit 1')
+      ->fetchField();
+  }
+
+  // Get the next code.
+  if (!$last_code) {
+    // First one! Should only happen once.
+    $next_code = '1';
+  }
+  else {
+    // Add 1 to last code.
+    $next_code = urlshort_inc_code($last_code);
+  }
 
   // Add it to the database.
   db_insert('urlshort')
@@ -222,7 +236,7 @@ function urlshort_ajax() {
     ))
     ->execute();
 
-  // Remember this new code as the last code created.
+  // Remember this new code as the last one created.
   variable_set('urlshort_last_code', $next_code);
 
   // Send the code to the client.
