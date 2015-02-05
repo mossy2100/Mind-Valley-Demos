@@ -9,7 +9,7 @@
  * Like other URL-shortening services, a base-62 system could be used that would
  * include all upper- and lower-case letters, but MySQL is case-insensitive out
  * of the box, so this will do for now. At least with this system the digits are
- * more likely to be transposed without errors if written.
+ * more likely to be transposed correctly if written.
  *
  * @var string
  */
@@ -139,9 +139,13 @@ function urlshort_lookup_code($url) {
  * @return string
  */
 function urlshort_inc_code($code) {
-  // Unfortunately can't use [] character indexing with constants.
-  $last_digit = substr(URLSHORT_CHARS, strlen(URLSHORT_CHARS) - 1);
-  // Find digit to increment:
+  // Can't use [] character indexing with constants, so copy to a var.
+  $urlshort_chars = URLSHORT_CHARS;
+
+  // Get the last/max digit. This approach permits changes to charset.
+  $last_digit = $urlshort_chars[strlen($urlshort_chars) - 1];
+
+  // Find index of digit in $code to increment.
   $found = FALSE;
   $code_len = strlen($code);
   $n = $code_len - 1;
@@ -155,12 +159,14 @@ function urlshort_inc_code($code) {
   }
 
   if ($found) {
-    // Get the integer equivalent of the current character at position $n.
-    $x = strpos(URLSHORT_CHARS, $ch);
-    // Next digit.
-    $new_digit = substr(URLSHORT_CHARS, $x + 1, 1);
+    // Get the integer value of the character at position $n.
+    $x = strpos($urlshort_chars, $ch);
+
+    // Get next digit.
+    $ch2 = $urlshort_chars[$x + 1];
+
     // Assemble new code.
-    $new_code = substr($code, 0, $n) . $new_digit . str_repeat('0', $code_len - $n - 1);
+    $new_code = substr($code, 0, $n) . $ch2 . str_repeat('0', $code_len - $n - 1);
   }
   else {
     // Increase code length by 1.
@@ -203,27 +209,22 @@ function urlshort_ajax() {
   }
 
   // Get the last code created.
-  $last_code = db_query('select code from urlshort order by id desc limit 1')
-    ->fetchField();
+  $last_code = variable_get('urlshort_last_code', '0');
 
-  // Get the next code.
-  if (!$last_code) {
-    // First one! Should only happen once.
-    $code = '1';
-  }
-  else {
-    // Add 1 to last code.
-    $code = urlshort_inc_code($last_code);
-  }
+  // Add 1 to last code.
+  $next_code = urlshort_inc_code($last_code);
 
   // Add it to the database.
   db_insert('urlshort')
     ->fields(array(
-      'code' => $code,
+      'code' => $next_code,
       'url' => $url,
     ))
     ->execute();
 
+  // Remember this new code as the last code created.
+  variable_set('urlshort_last_code', $next_code);
+
   // Send the code to the client.
-  echo json_encode(array('code' => $code));
+  echo json_encode(array('code' => $next_code));
 }
