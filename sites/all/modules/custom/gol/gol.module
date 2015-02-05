@@ -36,17 +36,6 @@ function gol_options_form() {
     '#default_value' => FALSE,
   );
 
-  // Buttons.
-  $form['clear'] = array(
-    '#markup' => '<input type="button" id="btn-clear" value="' . t('Clear') . '">',
-  );
-  $form['play'] = array(
-    '#markup' => '<input type="button" id="btn-play" value="' . t('Play') . '">',
-  );
-  $form['pause'] = array(
-    '#markup' => '<input type="button" id="btn-pause" value="' . t('Pause') . '">',
-  );
-
   // Randomisation options.
   $densities = range(0, 100, 5);
   $percentages = array_map(function($d) {
@@ -58,8 +47,19 @@ function gol_options_form() {
     '#options' => array_combine($densities, $percentages),
     '#default_value' => 50,
   );
-  $form['randomise'] = array(
-    '#markup' => '<input type="button" id="btn-randomise" value="' . t('Randomise') . '">',
+
+  // Buttons.
+  $form['populate'] = array(
+    '#markup' => '<input type="button" id="btn-populate" value="' . t('Populate') . '">',
+  );
+  $form['clear'] = array(
+    '#markup' => '<input type="button" id="btn-clear" value="' . t('Clear') . '">',
+  );
+  $form['play'] = array(
+    '#markup' => '<input type="button" id="btn-play" value="' . t('Play') . '">',
+  );
+  $form['step'] = array(
+    '#markup' => '<input type="button" id="btn-step" value="' . t('Step') . '">',
   );
 
   // The game board.

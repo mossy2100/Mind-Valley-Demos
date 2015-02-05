@@ -1,1 +1,22 @@
-1. Add throbber for when table is rendering.
+
+- Instructions/info panel.
+
+- Store form settings in a cookie.
+
+- Bring back the Pause button - it's too hard to know what to click to pause it. But disable unless playing.
+
+- If all die out, stop playing (pause) automatically.
+
+
+
+
+
+
+
+
+
+- Front page of website shows three lovely images made in Photoshop with "Choose demo".
+
+
+
+
