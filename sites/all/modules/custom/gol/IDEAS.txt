@@ -7,10 +7,9 @@
 
 - If all die out, stop playing (pause) automatically.
 
+- TRY TO MAKE IT FASTER WITH SMALL SQUARE SIZE.
 
-
-
-
+- Maybe remove the data attributes and get the info from the id. (split on -). Any reduction in HTML size could speed it up.
 
 
 
