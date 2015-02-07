@@ -1,38 +1,38 @@
-/* line 6, ../scss/gol.scss */
+/* line 6, ../scss/game-of-life.scss */
 body {
   background-color: #333;
   margin: 10px;
   overflow: hidden;
 }
 
-/* line 12, ../scss/gol.scss */
+/* line 12, ../scss/game-of-life.scss */
 #breadcrumb {
   display: none;
 }
 
-/* line 16, ../scss/gol.scss */
+/* line 16, ../scss/game-of-life.scss */
 div.section {
   margin: 0;
 }
 
-/* line 21, ../scss/gol.scss */
-#gol-options-form * {
+/* line 21, ../scss/game-of-life.scss */
+#game-of-life-options-form * {
   font-size: 20px;
   font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
 }
-/* line 28, ../scss/gol.scss */
-#gol-options-form .form-item,
-#gol-options-form input,
-#gol-options-form label {
+/* line 27, ../scss/game-of-life.scss */
+#game-of-life-options-form .form-item,
+#game-of-life-options-form input[type=button] {
   display: inline-block;
+  margin: 0 10px 10px 0;
 }
-/* line 33, ../scss/gol.scss */
-#gol-options-form > div {
+/* line 32, ../scss/game-of-life.scss */
+#game-of-life-options-form > div {
   display: block;
 }
-/* line 38, ../scss/gol.scss */
-#gol-options-form input,
-#gol-options-form select {
+/* line 37, ../scss/game-of-life.scss */
+#game-of-life-options-form input,
+#game-of-life-options-form select {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
@@ -42,40 +42,31 @@ div.section {
   border: solid 1px #c0c0c0;
   background-color: white;
 }
-/* line 45, ../scss/gol.scss */
-#gol-options-form .form-item {
+/* line 44, ../scss/game-of-life.scss */
+#game-of-life-options-form .form-item {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #dedede));
   background-image: -webkit-linear-gradient(#f7f7f7, #dedede);
   background-image: -moz-linear-gradient(#f7f7f7, #dedede);
   background-image: -o-linear-gradient(#f7f7f7, #dedede);
   background-image: linear-gradient(#f7f7f7, #dedede);
-  border-color: #d1d1d1;
-  padding: 10px;
+  border: solid 1px #d1d1d1;
+  padding: 9px 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
   height: 25px;
-  margin: 0;
 }
-/* line 55, ../scss/gol.scss */
-#gol-options-form .form-item * {
+/* line 53, ../scss/game-of-life.scss */
+#game-of-life-options-form .form-item * {
+  display: inline;
   line-height: 25px;
   padding: 0;
   margin: 0;
 }
-/* line 63, ../scss/gol.scss */
-#gol-options-form .form-item,
-#gol-options-form input[type=button] {
-  margin: 0 10px 10px 0;
-}
-/* line 67, ../scss/gol.scss */
-#gol-options-form #btn-play {
-  width: 100px;
-}
-/* line 71, ../scss/gol.scss */
-#gol-options-form input[type=button] {
+/* line 61, ../scss/game-of-life.scss */
+#game-of-life-options-form input[type=button] {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffa84c), color-stop(100%, #ff7b0d));
   background-image: -webkit-linear-gradient(#ffa84c, #ff7b0d);
   background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
@@ -87,8 +78,8 @@ div.section {
   font-weight: bold;
   height: 45px;
 }
-/* line 79, ../scss/gol.scss */
-#gol-options-form input[type=button]:hover {
+/* line 69, ../scss/game-of-life.scss */
+#game-of-life-options-form input[type=button]:hover {
   cursor: pointer;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
   background-image: -webkit-linear-gradient(#7abcff, #4096ee);
@@ -97,8 +88,8 @@ div.section {
   background-image: linear-gradient(#7abcff, #4096ee);
   border-color: #2989ec;
 }
-/* line 85, ../scss/gol.scss */
-#gol-options-form input[type=button].active {
+/* line 75, ../scss/game-of-life.scss */
+#game-of-life-options-form input[type=button].active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5ed337), color-stop(100%, #5eaa1b));
   background-image: -webkit-linear-gradient(#5ed337, #5eaa1b);
   background-image: -moz-linear-gradient(#5ed337, #5eaa1b);
@@ -106,39 +97,38 @@ div.section {
   background-image: linear-gradient(#5ed337, #5eaa1b);
   border-color: #529418;
 }
-/* line 90, ../scss/gol.scss */
-#gol-options-form input[type=button].pause {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff3019), color-stop(100%, #cf0404));
-  background-image: -webkit-linear-gradient(#ff3019, #cf0404);
-  background-image: -moz-linear-gradient(#ff3019, #cf0404);
-  background-image: -o-linear-gradient(#ff3019, #cf0404);
-  background-image: linear-gradient(#ff3019, #cf0404);
-  border-color: #b60404;
+/* line 81, ../scss/game-of-life.scss */
+#game-of-life-options-form .form-item-density {
+  margin-right: 0;
 }
-/* line 96, ../scss/gol.scss */
-#gol-options-form #gol-board {
+/* line 85, ../scss/game-of-life.scss */
+#game-of-life-options-form #btn-play {
+  width: 100px;
+}
+/* line 89, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid {
   display: block;
 }
-/* line 99, ../scss/gol.scss */
-#gol-options-form #gol-board table {
+/* line 92, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid table {
   margin: 0;
 }
-/* line 103, ../scss/gol.scss */
-#gol-options-form #gol-board td {
+/* line 96, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid td {
   background-color: #000;
   border: solid 1px #777;
   padding: 0;
   font-size: 0;
 }
-/* line 109, ../scss/gol.scss */
-#gol-options-form #gol-board td:hover {
+/* line 102, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid td:hover {
   background-color: #500;
 }
-/* line 114, ../scss/gol.scss */
-#gol-options-form #gol-board td.alive {
+/* line 107, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid td.alive {
   background-color: #fff;
 }
-/* line 117, ../scss/gol.scss */
-#gol-options-form #gol-board td.alive:hover {
+/* line 110, ../scss/game-of-life.scss */
+#game-of-life-options-form #game-of-life-grid td.alive:hover {
   background-color: #ffb6c1;
 }

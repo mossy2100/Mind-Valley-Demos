@@ -7,11 +7,11 @@
 /**
  * Implements hook_menu().
  */
-function gol_menu() {
+function game_of_life_menu() {
   $items['game-of-life'] = array(
     'description' => t("Conway's Game of Life."),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('gol_options_form'),
+    'page arguments' => array('game_of_life_options_form'),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
   );
@@ -21,7 +21,7 @@ function gol_menu() {
 /**
  * The single main form for selecting Game of Life options.
  */
-function gol_options_form() {
+function game_of_life_options_form() {
   // Options.
   $sizes = range(5, 30);
   $form['square_size'] = array(
@@ -35,10 +35,22 @@ function gol_options_form() {
     '#type' => 'checkbox',
     '#default_value' => FALSE,
   );
+  $form['speed'] = array(
+    '#title' => t("Speed"),
+    '#type' => 'select',
+    '#options' => array(
+      1000 => 1,
+      500 => 2,
+      200 => 3,
+      100 => 4,
+      0 => 5,
+    ),
+    '#default_value' => 0,
+  );
 
   // Randomisation options.
   $densities = range(0, 100, 5);
-  $percentages = array_map(function($d) {
+  $percentages = array_map(function ($d) {
     return "$d%";
   }, $densities);
   $form['density'] = array(
@@ -58,18 +70,21 @@ function gol_options_form() {
   $form['play'] = array(
     '#markup' => '<input type="button" id="btn-play" value="' . t('Play') . '">',
   );
+  $form['pause'] = array(
+    '#markup' => '<input type="button" id="btn-pause" value="' . t('Pause') . '">',
+  );
   $form['step'] = array(
     '#markup' => '<input type="button" id="btn-step" value="' . t('Step') . '">',
   );
 
-  // The game board.
-  $form['board'] = array(
-    '#markup' => "<div id='gol-board'></div>",
+  // The game grid.
+  $form['grid'] = array(
+    '#markup' => "<div id='game-of-life-grid'></div>",
   );
 
   // JS and CSS.
-  $form['#attached']['js'][] = drupal_get_path('module', 'gol') . '/js/gol.js';
-  $form['#attached']['css'][] = drupal_get_path('module', 'gol') . '/css/gol.css';
+  $form['#attached']['js'][] = drupal_get_path('module', 'game_of_life') . '/js/game-of-life.js';
+  $form['#attached']['css'][] = drupal_get_path('module', 'game_of_life') . '/css/game-of-life.css';
 
   return $form;
 }

@@ -1,0 +1,20 @@
+
+- Instructions/info panel.
+
+- Store form settings in a cookie.
+
+
+
+Ideas for the site as a whole
+=============================
+- Front page of website shows three lovely images made in Photoshop with "Choose demo".
+
+- Enable GA to track which demo is the most popular.
+
+
+
+TODO on production database
+============================
+- Enable GA and configure.
+- Create demos menu and home page.
+
