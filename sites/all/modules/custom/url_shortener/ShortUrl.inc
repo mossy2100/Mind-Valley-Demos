@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Class file for the UrlShort class, which maps to the urlshort DB table.
+ * Class file for the ShortUrl class, which maps to the short_url DB table.
  */
 
-class UrlShort {
+class ShortUrl {
 
   /**
    * Constant to define valid characters (digits) in a shortened URL code.
@@ -41,46 +41,49 @@ class UrlShort {
   // Static methods.
 
   /**
-   * Lookup a UrlShort given a code.
+   * Lookup a ShortUrl given a code.
    *
    * @param string $code
    *   The base-32 code.
    *
-   * @return UrlShort
+   * @return self
    *   Or FALSE if not found.
    */
   public static function lookupByCode($code) {
-    $rec = db_select('urlshort', 'u')
+    $rec = db_select('short_url', 'u')
       ->fields('u')
       ->condition('code', $code)
       ->execute()
       ->fetchObject();
-    return empty($rec) ? FALSE : new UrlShort($rec);
+    return empty($rec) ? FALSE : new self($rec);
   }
 
   /**
-   * Lookup a UrlShort given a URL.
+   * Lookup a ShortUrl given the original long URL.
    *
    * @param string $url
    *   The original URL.
    *
-   * @return UrlShort
+   * @return self
    *   Or FALSE if not found.
    */
   public static function lookupByUrl($url) {
-    $rec = db_select('urlshort', 'u')
+    $rec = db_select('short_url', 'u')
       ->fields('u')
       ->condition('url', $url)
       ->execute()
       ->fetchObject();
-    return empty($rec) ? FALSE : new UrlShort($rec);
+    return empty($rec) ? FALSE : new self($rec);
   }
 
   /**
    * Get/set the last code created.
+   *
+   * @return string
+   *   The last code as a base-32 string.
    */
   public static function lastCode() {
-    return db_select('urlshort', 'u')
+    return db_select('short_url', 'u')
       ->fields('u', array('code'))
       ->orderBy('id', 'desc')
       ->range(0, 1)
@@ -100,10 +103,10 @@ class UrlShort {
   public static function incCode($code) {
     // Can't use [] character indexing with constants, so, instead of using
     // substr(), copy to a string var (mainly for convenience).
-    $urlshort_chars = self::BASE32_DIGITS;
+    $base32_digits = self::BASE32_DIGITS;
 
     // Get the last/max digit. This approach permits changes to charset.
-    $last_digit = $urlshort_chars[strlen($urlshort_chars) - 1];
+    $last_digit = $base32_digits[strlen($base32_digits) - 1];
 
     // Find index of digit in $code to increment.
     $found = FALSE;
@@ -120,10 +123,10 @@ class UrlShort {
 
     if ($found) {
       // Get the integer value of the character at position $n.
-      $x = strpos($urlshort_chars, $ch);
+      $x = strpos($base32_digits, $ch);
 
       // Get next digit.
-      $ch2 = $urlshort_chars[$x + 1];
+      $ch2 = $base32_digits[$x + 1];
 
       // Assemble new code.
       $new_code = substr($code, 0, $n) . $ch2 . str_repeat('0', $code_len - $n - 1);
@@ -138,6 +141,9 @@ class UrlShort {
 
   /**
    * Get the next code.
+   *
+   * @return string
+   *   The next code as a base-32 string.
    */
   public static function nextCode() {
     $last_code = self::lastCode();
@@ -159,9 +165,10 @@ class UrlShort {
   // Instance methods.
 
   /**
-   * Construct a new UrlShort.
+   * Construct a new ShortUrl.
    *
-   * @param string $url
+   * @param mixed $param
+   *   Can be a string (the long URL) or a DB record to copy.
    *
    * @throws Exception
    */
@@ -181,7 +188,10 @@ class UrlShort {
   }
 
   /**
-   * Save a new UrlShort to the DB. Update or insert as required.
+   * Save a new ShortUrl to the DB. Update or insert as required.
+   *
+   * @return self
+   *   For method chaining.
    */
   public function save() {
     // If the code isn't set, use the next one.
@@ -189,7 +199,7 @@ class UrlShort {
       $this->code = self::nextCode();
     }
 
-    db_merge('urlshort')
+    db_merge('short_url')
       ->key(array('id' => $this->id))
       ->fields(array(
         'code' => $this->code,
@@ -204,9 +214,10 @@ class UrlShort {
    * Get/set the URL.
    * 
    * @param string $new_url
-   *   NULL for get mode.
+   *   Omit for get mode.
    *
-   * @return $this
+   * @return self
+   *   Or a string in get mode.
    */
   public function url($new_url = NULL) {
     if (isset($new_url)) {
@@ -225,9 +236,10 @@ class UrlShort {
    * Get/set the code.
    * 
    * @param string $new_code
-   *   NULL for get mode.
+   *   Omit for get mode.
    *
-   * @return $this
+   * @return self
+   *   Or a string in get mode.
    */
   public function code($new_code = NULL) {
     if (isset($new_code)) {

@@ -6,7 +6,7 @@
 /**
  * Implements hook_init().
  */
-function urlshort_init() {
+function url_shortener_init() {
   // Check if the request is for a URL expansion or a page on the normal
   // website (the main form, or a Drupal page).
   // If normal website, we use the 'www' subdomain.
@@ -14,7 +14,7 @@ function urlshort_init() {
 
   // Include the class that encapsulates a URL-code pair (and thus also a
   // database record).
-  require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'urlshort') . '/UrlShort.inc';
+  require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'url_shortener') . '/ShortUrl.inc';
 
   // Check if the requester is attempting a URL expansion.
   // If so, the URL should not begin with 'www'.
@@ -24,13 +24,13 @@ function urlshort_init() {
     // Check if the request looks like a code.
     $request_uri = trim($_SERVER['REQUEST_URI'], '/');
 
-    if (preg_match('/^[' . UrlShort::BASE32_DIGITS . ']+$/', $request_uri)) {
+    if (preg_match('/^[' . ShortUrl::BASE32_DIGITS . ']+$/', $request_uri)) {
       // Lookup the URL.
-      $url_short = UrlShort::lookupByCode($request_uri);
+      $short_url = ShortUrl::lookupByCode($request_uri);
 
-      if ($url_short) {
+      if ($short_url) {
         // Boom - URL expanded.
-        drupal_goto($url_short->url());
+        drupal_goto($short_url->url());
       }
     }
 
@@ -43,16 +43,16 @@ function urlshort_init() {
 /**
  * Implements hook_menu().
  */
-function urlshort_menu() {
+function url_shortener_menu() {
   $items['shorten'] = array(
     'description' => t("Go here to shorten a URL."),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('urlshort_form'),
+    'page arguments' => array('url_shortener_form'),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
   );
   $items['shorten/ajax'] = array(
-    'page callback' => 'urlshort_ajax',
+    'page callback' => 'url_shortener_ajax',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -64,7 +64,7 @@ function urlshort_menu() {
  *
  * @return array
  */
-function urlshort_form() {
+function url_shortener_form() {
   $form['error_msg'] = array(
     '#markup' => "<div id='error-msg'></div>",
   );
@@ -72,10 +72,10 @@ function urlshort_form() {
     '#type' => 'textfield',
     '#title' => t("1. Paste your embarrassingly long URL here &darr;"),
   );
-  $form['go'] = array(
+  $form['squish'] = array(
     '#type' => 'button',
     '#value' => t("Squish"),
-    '#prefix' => "<div id='go-btn-wrapper'><label for='edit-go' id='button-label'>" . t("2. Click this sexy button &rarr;") . " </label>",
+    '#prefix' => "<div id='squish-btn-wrapper'><label for='edit-squish' id='button-label'>" . t("2. Click this sexy button &rarr;") . " </label>",
     '#suffix' => "</div>",
   );
   $form['short_url'] = array(
@@ -85,15 +85,15 @@ function urlshort_form() {
   $form['msg'] = array(
     '#markup' => "<label>" . t("4. Have an awesome day :)") . "</label>",
   );
-  $form['#attached']['js'][] = drupal_get_path('module', 'urlshort') . '/js/urlshort.js';
-  $form['#attached']['css'][] = drupal_get_path('module', 'urlshort') . '/css/urlshort.css';
+  $form['#attached']['js'][] = drupal_get_path('module', 'url_shortener') . '/js/url_shortener.js';
+  $form['#attached']['css'][] = drupal_get_path('module', 'url_shortener') . '/css/url_shortener.css';
   return $form;
 }
 
 /**
  * AJAX callback for URL shortening.
  */
-function urlshort_ajax() {
+function url_shortener_ajax() {
   // Grab the URL from the query string.
   // Won't sanitise here, to preserve the provided URL - Drupal's DB API will
   // protect the database when we insert the URL later.
@@ -121,18 +121,18 @@ function urlshort_ajax() {
   }
 
   // Did we already do this one?
-  $url_short = UrlShort::lookupByUrl($url);
+  $short_url = ShortUrl::lookupByUrl($url);
 
-  if ($url_short) {
+  if ($short_url) {
     // Yes, we did. Return the existing code.
-    echo json_encode(array('code' => $url_short->code()));
+    echo json_encode(array('code' => $short_url->code()));
     return;
   }
 
   // Add it to the database.
-  $url_short = new UrlShort($url);
-  $url_short->save();
+  $short_url = new ShortUrl($url);
+  $short_url->save();
 
   // Send the new code to the client.
-  echo json_encode(array('code' => $url_short->code()));
+  echo json_encode(array('code' => $short_url->code()));
 }

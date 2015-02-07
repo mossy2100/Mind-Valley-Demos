@@ -5,8 +5,6 @@ TODO
 IDEAS
 1. Add some OOP e.g. the lookup functions, the base32 inc function. Create a class for shortened URLs.
 
-2. Add a hook_install() and .install file to create the urlshort table.
-
-3. Theme the login form same as the URL form. (maybe)
+2. Add a hook_install() and .install file to create the short_url table.
 
 4. Check best practice use of AJAX from a Drupal form.

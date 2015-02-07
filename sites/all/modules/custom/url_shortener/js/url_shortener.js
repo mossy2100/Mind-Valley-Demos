@@ -9,7 +9,7 @@
   /**
    * Add AJAX behaviours.
    */
-  function urlshortGoClick(e) {
+  function urlShortenerSquish(e) {
     // Prevent submission of the form.
     e.preventDefault();
 
@@ -41,7 +41,7 @@
   /**
    * Attach behaviours.
    */
-  function urlshortInit() {
+  function urlShortenerInit() {
     // Get the naked host name. We do this instead of hard-coding the host
     // name so it works in different environments (or if we move the site).
     var host = window.location.hostname;
@@ -69,10 +69,10 @@
       });
 
     // If the click Go, shorten the URL.
-    $('#edit-go').click(urlshortGoClick);
+    $('#edit-squish').click(urlShortenerSquish);
   }
 
   // Run the init func on page ready.
-  $(urlshortInit);
+  $(urlShortenerInit);
 
 })(jQuery);
