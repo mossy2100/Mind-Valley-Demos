@@ -22,20 +22,20 @@
       gameOfLife.grid.height(gridHeight);
 
       // Calculate the number of rows and columns that can be displayed.
-      var squareSize = +$('#edit-square-size').val();
+      var cellSize = +$('#edit-cell-size').val();
 
       // Calculate the maximum number of rows and columns canbe displayed in
       // viewable window. Record these values in the main object, as they are
       // needed when playing.
-      gameOfLife.nRows = Math.floor((gridHeight - 1) / (squareSize + 1));
-      gameOfLife.nCols = Math.floor((gridWidth - 1) / (squareSize + 1));
+      gameOfLife.nRows = Math.floor((gridHeight - 1) / (cellSize + 1));
+      gameOfLife.nCols = Math.floor((gridWidth - 1) / (cellSize + 1));
 
       // Draw the table.
       var table = "<table>";
       for (var row = 0; row < gameOfLife.nRows; row++) {
         table += "<tr>";
         for (var col = 0; col < gameOfLife.nCols; col++) {
-          table += "<td id='cell-" + col + "-" + row + "' data-col='" + col + "' data-row='" + row + "' style='width:" + squareSize + "px; height:" + squareSize + "px;'";
+          table += "<td id='cell-" + col + "-" + row + "' data-col='" + col + "' data-row='" + row + "' style='width:" + cellSize + "px; height:" + cellSize + "px;'";
 
           // Copy the existing cell state if possible.
           if (gameOfLife.isAlive(col, row)) {
@@ -367,8 +367,8 @@
       gameOfLife.initGrid();
       // Also on window resize.
       $(window).resize(gameOfLife.initGrid);
-      // Also if the square size changes.
-      $('#edit-square-size').change(gameOfLife.initGrid);
+      // Also if the cell size changes.
+      $('#edit-cell-size').change(gameOfLife.initGrid);
     }
   };
 

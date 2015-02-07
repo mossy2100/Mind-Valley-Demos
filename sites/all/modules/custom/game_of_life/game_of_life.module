@@ -24,8 +24,8 @@ function game_of_life_menu() {
 function game_of_life_options_form() {
   // Options.
   $sizes = range(5, 30);
-  $form['square_size'] = array(
-    '#title' => t("Square size"),
+  $form['cell_size'] = array(
+    '#title' => t("Cell size"),
     '#type' => 'select',
     '#options' => array_combine($sizes, $sizes),
     '#default_value' => 20,
