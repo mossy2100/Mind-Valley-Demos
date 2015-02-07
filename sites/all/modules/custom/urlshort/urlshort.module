@@ -4,18 +4,6 @@
  */
 
 /**
- * Constant to define valid characters (digits) in a shortened URL code.
- * Use my triacontakaidecimal (base-32) number system (no TOIL).
- * Like other URL-shortening services, a base-62 system could be used that would
- * include all upper- and lower-case letters, but MySQL is case-insensitive out
- * of the box, so this will do for now. At least with this system the digits are
- * more likely to be transposed correctly if written.
- *
- * @var string
- */
-define('URLSHORT_CHARS', '0123456789ABCDEFGHJKMNPQRSUVWXYZ');
-
-/**
  * Implements hook_init().
  */
 function urlshort_init() {
@@ -24,6 +12,10 @@ function urlshort_init() {
   // If normal website, we use the 'www' subdomain.
   // If a URL expansion is wanted, use the host name without 'www'.
 
+  // Include the class that encapsulates a URL-code pair (and thus also a
+  // database record).
+  require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'urlshort') . '/UrlShort.inc';
+
   // Check if the requester is attempting a URL expansion.
   // If so, the URL should not begin with 'www'.
   $host = $_SERVER['HTTP_HOST'];
@@ -31,12 +23,14 @@ function urlshort_init() {
 
     // Check if the request looks like a code.
     $request_uri = trim($_SERVER['REQUEST_URI'], '/');
-    if (preg_match('/^[' . URLSHORT_CHARS . ']+$/', $request_uri)) {
+
+    if (preg_match('/^[' . UrlShort::BASE32_DIGITS . ']+$/', $request_uri)) {
       // Lookup the URL.
-      $url = urlshort_lookup_url($request_uri);
-      if ($url) {
+      $url_short = UrlShort::lookupByCode($request_uri);
+
+      if ($url_short) {
         // Boom - URL expanded.
-        drupal_goto($url);
+        drupal_goto($url_short->url());
       }
     }
 
@@ -97,86 +91,6 @@ function urlshort_form() {
 }
 
 /**
- * Get the URL matching a short code.
- *
- * @param string $code
- *   The code from the shortened URL.
- *
- * @return string
- *   The URL or FALSE if not found.
- */
-function urlshort_lookup_url($code) {
-  $url = db_select('urlshort', 'u')
-    ->fields('u', array('url'))
-    ->condition('code', $code)
-    ->execute()
-    ->fetchField();
-  return empty($url) ? FALSE : $url;
-}
-
-/**
- * Get the code matching a URL.
- *
- * @param string $url
- *   The original URL.
- *
- * @return string
- *   The code or FALSE if not found.
- */
-function urlshort_lookup_code($url) {
-  $code = db_select('urlshort', 'u')
-    ->fields('u', array('code'))
-    ->condition('url', $url)
-    ->execute()
-    ->fetchField();
-  return empty($code) ? FALSE : $code;
-}
-
-/**
- * Increments the provided code.
- *
- * @param string $code
- * @return string
- */
-function urlshort_inc_code($code) {
-  // Can't use [] character indexing with constants, so copy to a var.
-  $urlshort_chars = URLSHORT_CHARS;
-
-  // Get the last/max digit. This approach permits changes to charset.
-  $last_digit = $urlshort_chars[strlen($urlshort_chars) - 1];
-
-  // Find index of digit in $code to increment.
-  $found = FALSE;
-  $code_len = strlen($code);
-  $n = $code_len - 1;
-  while ($n >= 0) {
-    $ch = $code[$n];
-    if ($ch != $last_digit) {
-      $found = TRUE;
-      break;
-    }
-    $n--;
-  }
-
-  if ($found) {
-    // Get the integer value of the character at position $n.
-    $x = strpos($urlshort_chars, $ch);
-
-    // Get next digit.
-    $ch2 = $urlshort_chars[$x + 1];
-
-    // Assemble new code.
-    $new_code = substr($code, 0, $n) . $ch2 . str_repeat('0', $code_len - $n - 1);
-  }
-  else {
-    // Increase code length by 1.
-    $new_code = '1' . str_repeat('0', $code_len);
-  }
-
-  return $new_code;
-}
-
-/**
  * AJAX callback for URL shortening.
  */
 function urlshort_ajax() {
@@ -192,8 +106,14 @@ function urlshort_ajax() {
     return;
   }
 
-  // We will, however, check it's actually a URL.
+  // If it doesn't begin with http:// or https://, append http:// by default.
+  if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
+    $url = "http://$url";
+  }
+
+  // Double-check it's actually a URL.
   $url_info = @parse_url($url);
+
   if (!$url_info) {
     // Return JSON.
     echo json_encode(array('error' => t("Please paste a valid URL in the long URL field.")));
@@ -201,44 +121,18 @@ function urlshort_ajax() {
   }
 
   // Did we already do this one?
-  $code = urlshort_lookup_code($url);
-  if ($code) {
+  $url_short = UrlShort::lookupByUrl($url);
+
+  if ($url_short) {
     // Yes, we did. Return the existing code.
-    echo json_encode(array('code' => $code));
+    echo json_encode(array('code' => $url_short->code()));
     return;
   }
 
-  // Get the last code created.
-  $last_code = variable_get('urlshort_last_code', NULL);
-
-  // If not found in the persistent variable, fall back to looking in the short
-  // URL table. Should only happen once.
-  if (!$last_code) {
-    $last_code = db_query('select code from urlshort order by id desc limit 1')
-      ->fetchField();
-  }
-
-  // Get the next code.
-  if (!$last_code) {
-    // First one! Should only happen once.
-    $next_code = '1';
-  }
-  else {
-    // Add 1 to last code.
-    $next_code = urlshort_inc_code($last_code);
-  }
-
   // Add it to the database.
-  db_insert('urlshort')
-    ->fields(array(
-      'code' => $next_code,
-      'url' => $url,
-    ))
-    ->execute();
+  $url_short = new UrlShort($url);
+  $url_short->save();
 
-  // Remember this new code as the last one created.
-  variable_set('urlshort_last_code', $next_code);
-
-  // Send the code to the client.
-  echo json_encode(array('code' => $next_code));
+  // Send the new code to the client.
+  echo json_encode(array('code' => $url_short->code()));
 }
