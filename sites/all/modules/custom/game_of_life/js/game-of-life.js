@@ -115,9 +115,8 @@
       // If checking for wrap, see if looking at cells outside the grid.
       if (checkWrap) {
         if (col < 0 || col >= gameOfLife.nCols || row < 0 || row >= gameOfLife.nRows) {
-
           // Is wrapping on?
-          if ($('#edit-wrap').is(':checked')) {
+          if (gameOfLife.wrap) {
 
             // Implement wrapping of columns.
             if (col < 0) {
@@ -331,6 +330,14 @@
       gameOfLife.tickDelay = +speedInput.val();
       speedInput.change(function () {
         gameOfLife.tickDelay = +speedInput.val();
+      });
+
+      // Also cache the wrap checkbox state, to avoid checking repeatedly during
+      // board update.
+      var cbWrap = $('#edit-wrap');
+      gameOfLife.wrap = cbWrap.is(':checked');
+      cbWrap.click(function() {
+        gameOfLife.wrap = cbWrap.is(':checked');
       });
 
       // Buttons.
