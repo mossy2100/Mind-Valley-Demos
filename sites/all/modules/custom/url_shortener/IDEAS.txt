@@ -1,10 +1,4 @@
-TODO
-1. Prepend http:// if not already there.
-
 
 IDEAS
-1. Add some OOP e.g. the lookup functions, the base32 inc function. Create a class for shortened URLs.
 
-2. Add a hook_install() and .install file to create the short_url table.
-
-4. Check best practice use of AJAX from a Drupal form.
+- Check best practice use of AJAX from a Drupal form.

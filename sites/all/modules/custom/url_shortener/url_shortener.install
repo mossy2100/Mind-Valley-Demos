@@ -1,0 +1,38 @@
+<?php
+/**
+ * @file
+ * Install file for the URL Shortener module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function url_shortener_schema() {
+  $schema['short_url'] = array(
+    'description' => 'Stores URLs with their corresponding code.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => "The unique record id.",
+      ),
+      'code' => array(
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'description' => "The unique base-32 code.",
+      ),
+      'url' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => "The original long URL.",
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'code' => array('code'),
+    ),
+  );
+  return $schema;
+}
