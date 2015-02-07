@@ -128,6 +128,7 @@ input[type=button] {
   position: absolute;
   left: 6px;
   top: 60px;
+  @include opacity(0.9);
 
   .content {
     padding: 10px;

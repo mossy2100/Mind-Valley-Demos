@@ -23,23 +23,22 @@ function game_of_life_menu() {
  */
 function game_of_life_options_form() {
   // Options.
-  $sizes = range(5, 30);
+  $sizes = range(5, 30, 5);
   $form['cell_size'] = array(
     '#title' => t("Cell size"),
     '#type' => 'select',
     '#options' => array_combine($sizes, $sizes),
     '#default_value' => 20,
   );
+
+  $speeds = range(1, 6);
+  $delays = array_map(function($s) {
+    return (6 - $s) * 200;
+  }, $speeds);
   $form['speed'] = array(
     '#title' => t("Speed"),
     '#type' => 'select',
-    '#options' => array(
-      1000 => 1,
-      500 => 2,
-      200 => 3,
-      100 => 4,
-      0 => 5,
-    ),
+    '#options' => array_combine($delays, $speeds),
     '#default_value' => 0,
   );
   $form['wrap'] = array(
@@ -49,7 +48,7 @@ function game_of_life_options_form() {
   );
 
   // Randomisation options.
-  $densities = range(0, 100, 5);
+  $densities = range(0, 100, 10);
   $percentages = array_map(function ($d) {
     return "$d%";
   }, $densities);

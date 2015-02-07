@@ -161,24 +161,26 @@ input[type=button].active {
   position: absolute;
   left: 6px;
   top: 60px;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+  opacity: 0.9;
 }
-/* line 132, ../scss/game-of-life.scss */
+/* line 133, ../scss/game-of-life.scss */
 #block-block-1 .content {
   padding: 10px;
   overflow-y: scroll;
   height: 100%;
 }
-/* line 138, ../scss/game-of-life.scss */
+/* line 139, ../scss/game-of-life.scss */
 #block-block-1 h2 {
   color: #ff4500;
   font-size: 30px;
   margin-top: 0;
 }
-/* line 144, ../scss/game-of-life.scss */
+/* line 145, ../scss/game-of-life.scss */
 #block-block-1 a {
   color: #4169e1;
 }
-/* line 148, ../scss/game-of-life.scss */
+/* line 149, ../scss/game-of-life.scss */
 #block-block-1 #btn-close {
   padding: 0;
   margin: 0 0 5px 5px;
