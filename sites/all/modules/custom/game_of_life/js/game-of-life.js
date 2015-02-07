@@ -24,8 +24,9 @@
       // Calculate the number of rows and columns that can be displayed.
       var squareSize = +$('#edit-square-size').val();
 
-      // Record the number of columns and rows in the main object, as this info
-      // is needed when playing.
+      // Calculate the maximum number of rows and columns canbe displayed in
+      // viewable window. Record these values in the main object, as they are
+      // needed when playing.
       gameOfLife.nRows = Math.floor((gridHeight - 1) / (squareSize + 1));
       gameOfLife.nCols = Math.floor((gridWidth - 1) / (squareSize + 1));
 
@@ -269,12 +270,45 @@
     },
 
     /**
+     * Toggle the instructions.
+     */
+    toggleInstructions: function () {
+      if (!gameOfLife.instructionsShowing) {
+        // Display the instructions.
+
+        var width = +gameOfLife.grid.find('table').width() - 42,
+          gridTop = +gameOfLife.grid.offset().top,
+          gridHeight = +gameOfLife.grid.height();
+
+        gameOfLife.instructions.css('top', gridTop + 'px');
+        gameOfLife.instructions.width(width);
+        gameOfLife.instructions.css('max-height', (gridHeight - 60) + 'px');
+        gameOfLife.instructions.find('.content').css('max-height', (gridHeight - 80) + 'px');
+        gameOfLife.instructions.show();
+        gameOfLife.instructionsShowing = true;
+      }
+      else {
+        gameOfLife.hideInstructions();
+      }
+    },
+
+    /**
+     * Hide the instructions.
+     */
+    hideInstructions: function () {
+      // Hide the instructions.
+      gameOfLife.instructions.hide();
+      gameOfLife.instructionsShowing = false;
+    },
+
+    /**
      * Attach behaviours.
      */
     setup: function () {
       // Cache some jQuery items.
       gameOfLife.grid = $('#game-of-life-grid');
       gameOfLife.form = $('#game-of-life-options-form');
+      gameOfLife.instructions = $('#block-block-1');
 
       // The grid is initially not playing.
       gameOfLife.playing = false;
@@ -304,6 +338,8 @@
       $('#btn-play').click(gameOfLife.play);
       $('#btn-pause').click(gameOfLife.pause);
       $('#btn-step').click(gameOfLife.step);
+      $('#btn-instructions').click(gameOfLife.toggleInstructions);
+      $('#btn-close').click(gameOfLife.hideInstructions);
 
       // Table cells.
       gameOfLife.grid.find('td').live('click', function () {

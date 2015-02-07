@@ -30,11 +30,6 @@ function game_of_life_options_form() {
     '#options' => array_combine($sizes, $sizes),
     '#default_value' => 20,
   );
-  $form['wrap'] = array(
-    '#title' => t("Wrap grid"),
-    '#type' => 'checkbox',
-    '#default_value' => FALSE,
-  );
   $form['speed'] = array(
     '#title' => t("Speed"),
     '#type' => 'select',
@@ -46,6 +41,11 @@ function game_of_life_options_form() {
       0 => 5,
     ),
     '#default_value' => 0,
+  );
+  $form['wrap'] = array(
+    '#title' => t("Wrap grid"),
+    '#type' => 'checkbox',
+    '#default_value' => FALSE,
   );
 
   // Randomisation options.
@@ -75,6 +75,9 @@ function game_of_life_options_form() {
   );
   $form['step'] = array(
     '#markup' => '<input type="button" id="btn-step" value="' . t('Step') . '">',
+  );
+  $form['instructions'] = array(
+    '#markup' => '<input type="button" id="btn-instructions" value="?">',
   );
 
   // The game grid.

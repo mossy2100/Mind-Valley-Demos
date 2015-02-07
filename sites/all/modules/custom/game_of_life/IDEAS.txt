@@ -1,5 +1,4 @@
 
-- Instructions/info panel.
 
 - Store form settings in a cookie.
 
