@@ -276,14 +276,15 @@
       if (!gameOfLife.instructionsShowing) {
         // Display the instructions.
 
-        var width = +gameOfLife.grid.find('table').width() - 42,
-          gridTop = +gameOfLife.grid.offset().top,
-          gridHeight = +gameOfLife.grid.height();
+        var table = gameOfLife.grid.find('table'),
+          width = +table.width() - 42,
+          top = +table.offset().top - $('#content').offset().top + 6,
+          height = +table.height() - 42;
 
-        gameOfLife.instructions.css('top', gridTop + 'px');
+        gameOfLife.instructions.css('top', top + 'px');
         gameOfLife.instructions.width(width);
-        gameOfLife.instructions.css('max-height', (gridHeight - 60) + 'px');
-        gameOfLife.instructions.find('.content').css('max-height', (gridHeight - 80) + 'px');
+        gameOfLife.instructions.css('max-height', height + 'px');
+        gameOfLife.instructions.find('.content').css('max-height', (height - 20) + 'px');
         gameOfLife.instructions.show();
         gameOfLife.instructionsShowing = true;
       }
