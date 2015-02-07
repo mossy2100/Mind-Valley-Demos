@@ -63,9 +63,6 @@ function game_of_life_options_form() {
   $form['populate'] = array(
     '#markup' => '<input type="button" id="btn-populate" value="' . t('Populate') . '">',
   );
-  $form['clear'] = array(
-    '#markup' => '<input type="button" id="btn-clear" value="' . t('Clear') . '">',
-  );
   $form['play'] = array(
     '#markup' => '<input type="button" id="btn-play" value="' . t('Play') . '">',
   );
@@ -74,6 +71,9 @@ function game_of_life_options_form() {
   );
   $form['step'] = array(
     '#markup' => '<input type="button" id="btn-step" value="' . t('Step') . '">',
+  );
+  $form['clear'] = array(
+    '#markup' => '<input type="button" id="btn-clear" value="' . t('Clear') . '">',
   );
   $form['instructions'] = array(
     '#markup' => '<input type="button" id="btn-instructions" value="?">',
