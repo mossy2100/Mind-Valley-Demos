@@ -8,7 +8,7 @@ body {
 
 $btn-height: 35px;
 
-#urlshort-form {
+#url-shortener-form {
   width: 512px;
 
   input,
@@ -41,7 +41,7 @@ $btn-height: 35px;
     width: 500px;
   }
 
-  #go-btn-wrapper {
+  #squish-btn-wrapper {
     height: $btn-height;
   }
 
@@ -50,7 +50,7 @@ $btn-height: 35px;
     line-height: $btn-height;
   }
 
-  #edit-go {
+  #edit-squish {
     @include background-image(linear-gradient(#ffa84c, #ff7b0d));
     border-color: darken(#ff7b0d, 5%);
     color: #fff;
@@ -76,7 +76,7 @@ $btn-height: 35px;
   }
 
   .form-item-long-url,
-  #go-btn-wrapper,
+  #squish-btn-wrapper,
   .form-item-short-url {
     margin-bottom: 30px;
   }
