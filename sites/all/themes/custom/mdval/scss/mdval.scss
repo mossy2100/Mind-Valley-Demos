@@ -67,9 +67,20 @@ input[type=submit] {
 
 input[type=text],
 input[type=password],
-select {
+select,
+textarea {
   @include border-radius(5px);
   padding: 5px;
   border: solid 1px #c0c0c0;
   background-color: white;
+}
+
+.form-actions {
+  input[type=submit] {
+    margin-right: 5px;
+  }
+}
+
+.field-name-body {
+  margin: 20px 0;
 }
