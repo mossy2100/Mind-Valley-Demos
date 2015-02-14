@@ -1,0 +1,7 @@
+name = Mind Valley
+description = A basic theme for the Mind Valley demos.
+package = Mind Valley
+core = 7.x
+base = stark
+
+stylesheets[all][] = css/mdval.css

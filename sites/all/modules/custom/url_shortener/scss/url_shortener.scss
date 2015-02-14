@@ -6,23 +6,10 @@ body {
   color: #000;
 }
 
-$btn-height: 35px;
+$btn-height: 45px;
 
 #url-shortener-form {
   width: 512px;
-
-  input,
-  label,
-  #error-msg {
-    font-size: 20px;
-    font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
-  }
-
-  input {
-    @include border-radius(5px);
-    padding: 5px;
-    border: solid 1px #c0c0c0;
-  }
 
   label {
     font-weight: bold;
@@ -51,19 +38,7 @@ $btn-height: 35px;
   }
 
   #edit-squish {
-    @include background-image(linear-gradient(#ffa84c, #ff7b0d));
-    border-color: darken(#ff7b0d, 5%);
-    color: #fff;
-    padding: 5px;
-    font-weight: bold;
     float: right;
-    height: $btn-height;
-
-    &:hover {
-      cursor: pointer;
-      @include background-image(linear-gradient(#7abcff, #4096ee));
-      border-color: darken(#4096ee, 5%);
-    }
   }
 
   #edit-short-url {

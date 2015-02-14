@@ -1,0 +1,86 @@
+/* line 5, ../scss/mdval.scss */
+html {
+  font-size: 20px;
+  font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
+}
+/* line 9, ../scss/mdval.scss */
+html * {
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/* line 15, ../scss/mdval.scss */
+#breadcrumb {
+  display: none;
+}
+
+/* line 19, ../scss/mdval.scss */
+.button, #block-menu-menu-demos a, input[type=button],
+input[type=submit] {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffa84c), color-stop(100%, #ff7b0d));
+  background-image: -webkit-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: -o-linear-gradient(#ffa84c, #ff7b0d);
+  background-image: linear-gradient(#ffa84c, #ff7b0d);
+  color: #fff;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: solid 1px #f36e00;
+  font-weight: bold;
+  height: 45px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+/* line 30, ../scss/mdval.scss */
+.button:hover, #block-menu-menu-demos a:hover, input[type=button]:hover,
+input[type=submit]:hover {
+  cursor: pointer;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
+  background-image: -webkit-linear-gradient(#7abcff, #4096ee);
+  background-image: -moz-linear-gradient(#7abcff, #4096ee);
+  background-image: -o-linear-gradient(#7abcff, #4096ee);
+  background-image: linear-gradient(#7abcff, #4096ee);
+  border-color: #2989ec;
+}
+
+/* line 38, ../scss/mdval.scss */
+#block-menu-menu-demos h2 {
+  display: none;
+}
+/* line 42, ../scss/mdval.scss */
+#block-menu-menu-demos ul, #block-menu-menu-demos li {
+  width: 220px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 49, ../scss/mdval.scss */
+#block-menu-menu-demos li {
+  margin-bottom: 10px;
+}
+/* line 53, ../scss/mdval.scss */
+#block-menu-menu-demos a {
+  display: inline-block;
+  width: 220px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+}
+
+/* line 70, ../scss/mdval.scss */
+input[type=text],
+input[type=password],
+select {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  border: solid 1px #c0c0c0;
+  background-color: white;
+}

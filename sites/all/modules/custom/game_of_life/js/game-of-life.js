@@ -277,7 +277,7 @@
 
         var table = gameOfLife.grid.find('table'),
           width = +table.width() - 42,
-          top = +table.offset().top - $('#content').offset().top + 6,
+          top = +table.offset().top - $('#content').offset().top + 16,
           height = +table.height() - 42;
 
         gameOfLife.instructions.css('top', top + 'px');

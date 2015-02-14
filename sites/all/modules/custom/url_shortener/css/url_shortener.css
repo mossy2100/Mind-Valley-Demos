@@ -8,29 +8,12 @@ body {
 #url-shortener-form {
   width: 512px;
 }
-/* line 16, ../scss/url_shortener.scss */
-#url-shortener-form input,
-#url-shortener-form label,
-#url-shortener-form #error-msg {
-  font-size: 20px;
-  font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
-}
-/* line 21, ../scss/url_shortener.scss */
-#url-shortener-form input {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  padding: 5px;
-  border: solid 1px #c0c0c0;
-}
-/* line 27, ../scss/url_shortener.scss */
+/* line 14, ../scss/url_shortener.scss */
 #url-shortener-form label {
   font-weight: bold;
   margin-bottom: 5px;
 }
-/* line 32, ../scss/url_shortener.scss */
+/* line 19, ../scss/url_shortener.scss */
 #url-shortener-form #error-msg {
   display: none;
   background-color: #fee;
@@ -42,54 +25,34 @@ body {
   border-radius: 5px;
   padding: 5px;
 }
-/* line 40, ../scss/url_shortener.scss */
+/* line 27, ../scss/url_shortener.scss */
 #url-shortener-form #edit-long-url {
   width: 500px;
 }
-/* line 44, ../scss/url_shortener.scss */
+/* line 31, ../scss/url_shortener.scss */
 #url-shortener-form #squish-btn-wrapper {
-  height: 35px;
+  height: 45px;
 }
-/* line 48, ../scss/url_shortener.scss */
+/* line 35, ../scss/url_shortener.scss */
 #url-shortener-form #button-label {
   display: inline;
-  line-height: 35px;
+  line-height: 45px;
 }
-/* line 53, ../scss/url_shortener.scss */
+/* line 40, ../scss/url_shortener.scss */
 #url-shortener-form #edit-squish {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffa84c), color-stop(100%, #ff7b0d));
-  background-image: -webkit-linear-gradient(#ffa84c, #ff7b0d);
-  background-image: -moz-linear-gradient(#ffa84c, #ff7b0d);
-  background-image: -o-linear-gradient(#ffa84c, #ff7b0d);
-  background-image: linear-gradient(#ffa84c, #ff7b0d);
-  border-color: #f36e00;
-  color: #fff;
-  padding: 5px;
-  font-weight: bold;
   float: right;
-  height: 35px;
 }
-/* line 62, ../scss/url_shortener.scss */
-#url-shortener-form #edit-squish:hover {
-  cursor: pointer;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #7abcff), color-stop(100%, #4096ee));
-  background-image: -webkit-linear-gradient(#7abcff, #4096ee);
-  background-image: -moz-linear-gradient(#7abcff, #4096ee);
-  background-image: -o-linear-gradient(#7abcff, #4096ee);
-  background-image: linear-gradient(#7abcff, #4096ee);
-  border-color: #2989ec;
-}
-/* line 69, ../scss/url_shortener.scss */
+/* line 44, ../scss/url_shortener.scss */
 #url-shortener-form #edit-short-url {
   width: 250px;
   float: right;
 }
-/* line 74, ../scss/url_shortener.scss */
+/* line 49, ../scss/url_shortener.scss */
 #url-shortener-form .form-item-short-url {
   overflow: hidden;
   *zoom: 1;
 }
-/* line 80, ../scss/url_shortener.scss */
+/* line 55, ../scss/url_shortener.scss */
 #url-shortener-form .form-item-long-url,
 #url-shortener-form #squish-btn-wrapper,
 #url-shortener-form .form-item-short-url {

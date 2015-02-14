@@ -45,6 +45,7 @@ function url_shortener_init() {
  */
 function url_shortener_menu() {
   $items['shorten'] = array(
+    'title' => t("URL Shortener"),
     'description' => t("Go here to shorten a URL."),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('url_shortener_form'),
